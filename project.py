@@ -32,32 +32,30 @@ X1 = df[:,0:8]
 y = df[:,8]
 
 
+X1 = (X1 - X1.min(axis=0))/X1.ptp(axis=0)
 
-X1[:, 0] = (X1[:, 0] - X1[:, 0].min())/ (X1[:, 0].max() - X1[:, 0].min())
 
-for i in range(8):
-    data = (X1[:,i] - X1[:,i].min())/ (X1[:,i].max() - X1[:,i].min())
-    X1[:,i] = data
-    
 
-arr1 = np.ones(768)
+
+arr1 = np.ones(X1.shape[0])
 
 
 X1 = np.insert(X1, 0, arr1, axis=1)
 
 
 
-"""def unison_shuffled_copies(a, b):
+def unison_shuffled_copies(a, b):
     assert len(a) == len(b)
     p = np.random.permutation(len(a))
     return a[p], b[p]
 
 X1, y = unison_shuffled_copies(X1,y)
 
+print(shape(X1))
+print(shape(y))
+print("\n\n\n\npost shuffling")
 
-print("\n\n\n\npost shuffling")"""
-
-X_train, X_test, y_train, y_test = train_test_split(X1, y, train_size=0.8, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X1, y, train_size=0.8, random_state=0, shuffle=False)
 y_train = y_train[..., np.newaxis]
 y_test = y_test[..., np.newaxis]
 
@@ -97,6 +95,7 @@ h[h < 0.5] = 0
 y_test_predicted = h
 print(accuracy_score(y_test, y_test_predicted))
 
+
 Z = np.matmul(X_train, theta_old)
 h = sigmoid(Z)
 h[h >= 0.5] = 1 
@@ -104,5 +103,6 @@ h[h < 0.5] = 0
 
 
 y_train_predicted = h
+
 print(accuracy_score(y_train, y_train_predicted))     
         
